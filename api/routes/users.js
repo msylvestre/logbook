@@ -37,7 +37,45 @@ router.get('/login/', urlencodedParser, function (req, res) {
   var username = req.query.username;
   var password = req.query.password;
 
-  res.end("You reached GET /api/users/login/\n" + "username: " + username + "\npassword: " + password);
+  var response = {
+    statusCode:666,
+    msg:"You reached GET /api/users/login/"
+  }
+
+  console.log(JSON.stringify(response, null, 2));
+
+  res.statusCode = 200;
+  res.send(response);
+
+  /*
+  ERROR Structure
+  ------------------------------------------------------------------
+  {
+    "error": {
+      "name": "ResourceNotFound",
+      "message": "The requested resource does not exist.",
+      "@context": "/contexts/Error.jsonld",
+      "@id": "/errors/ResourceNotFoundError",
+      "code": 4000008,
+      "statusDescription": "Not Found",
+      "status": 404,
+      "statusCode": 404
+    }
+  }
+  RESPONSE CODE : 404
+
+
+  SUCCESS Structure
+  ------------------------------------------------------------------
+  {
+    "access_token": "WpSHuqzniHFoUi1ahhFShLwh6IPYlp7k",
+    "expires_in": 360000,
+    "token_type": "Bearer"
+  }
+
+  RESPONSE CODE : 200
+  */
+
     
 });
 

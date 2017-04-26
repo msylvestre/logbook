@@ -1,32 +1,11 @@
 var bodyParser = require('body-parser');
-var http       = require('http');
+var request    = require('request');
 
 
-var options = {
-   host: '127.0.0.1',
-   port: '8081',
-   path: '/api/users/login?username=msylvestr&password=123456789q',
-   method: 'GET'  
-};
 
-// Callback function is used to deal with response
-var callback = function(response){
+request('http://127.0.0.1:8081/api/users/login?username=msylvestr&password=123456789q', function (error, response, body) {
 
-   var body = '';
-
-   // Listener on "data" event. Continuously update stream with data
-   response.on('data', function(data) {
-      body += data;
-   });
-   
-   // Listener on "end" event.  Time to render the page
-   response.on('end', function() {
-      
-      console.log('body: ' + body);
-
-   });
-};
-
-// Make a request to the API server
-var reqToApi = http.request(options, callback);
-reqToApi.end();
+  console.log('error:', error); // Print the error if one occurred 
+  console.log('statusCode:', response.statusCode); // Print the response status code if a response was received 
+  console.log('body:', body); // Print the HTML for the Google homepage. 
+});
