@@ -1,0 +1,24 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Racing Logbook API",
+  "main": "api.js",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msylvestre/logbook.git"
+  },
+  "author": "msylvestre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msylvestre/logbook/issues"
+  },
+  "homepage": "https://github.com/msylvestre/logbook#readme"
+}
