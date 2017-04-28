@@ -54,7 +54,7 @@ var User = function () {
               
               if (err) konsole.log(err);
 
-              konsole.log(JSON.stringify(result, null, 2));
+              //konsole.log(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
                 callback(false, 'Wrong creds or user not found.');  // User Not Found
@@ -76,12 +76,63 @@ var User = function () {
 
   };
 
-  this.createDriver = function(role) {
 
-    var sql = 'INSERT INTO orders (info)' +
+
+  this.create = function(user, callback) {
+
+    var sql = 'INSERT INTO logbook_user (info)' +
               'VALUES ($1)';
 
-    var param = ['{ "customer": "John Doe", "items": {"product": "Beer","qty": 6}}'];
+    var params = [user];
+
+    var pgClient = new pg.Client(dbConfig);
+
+    pgClient.connect(function (err) {
+
+      if (err) {
+        konsole.log(err);
+        callback(false, err.toString());
+      }
+      else {
+
+        pgClient.query(sql, params, function (err, result) {
+
+          if (err) {
+            var errorMsg = err.toString();
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            konsole.log(err);
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            pgClient.end(function(err) {
+              if (err) konsole.log(err);
+              callback(false, errorMsg);
+            });
+          }
+          else {
+
+            pgClient.end(function (err) {                       // disconnect the client 
+              
+              if (err) konsole.log(err);
+
+              konsole.log(JSON.stringify(result, null, 2));
+
+              if (result.rowCount == 0) {
+                callback(false, 'User creation failed');  // User Not Found
+              }
+              else {
+                callback(true, null);  // Template found
+              }
+
+            });
+
+          }
+
+
+        });
+
+      }      
+            
+    });
 
   };
 

@@ -2,8 +2,8 @@
 
 CREATE TABLE logbook_user (
  id serial NOT NULL PRIMARY KEY,
- email text NOT NULL,
- password text NOT NULL,
+ email text NULL,
+ password text NULL,
  info json NULL
 );
 
