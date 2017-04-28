@@ -63,8 +63,6 @@ router.post('/', urlencodedParser, function (req, res) {
 //--------------------------------------------------------------------------
 router.post('/login/', urlencodedParser, function (req, res) {
 
-  // TEST : http://127.0.0.1:8081/api/users/login?email=marco@venzee.com&password=123456789q
-
   var email = req.body.email;
   var password = req.body.password;
   var response;
@@ -97,7 +95,34 @@ router.post('/login/', urlencodedParser, function (req, res) {
 //--------------------------------------------------------------------------
 router.get('/', function (req, res) {
 
-  res.end("You reached GET /api/users");
+  var response;
+
+  user.getList(function(list, err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "getListFail",
+        description: err,
+        payload: null
+      };
+
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "getListSuccess",
+        description: "User list retreived succesfully.",
+        payload: list
+      };
+
+    }
+    
+    console.log(JSON.stringify(response, null, 2));
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  })
 
 });
 
@@ -115,7 +140,32 @@ router.get('/:id', function (req, res) {
 //--------------------------------------------------------------------------
 router.delete('/:id', function (req, res) {
 
-  res.end("You reached DELETE /api/users/:id");
+  var response;
+
+  user.delete(req.params.id, function(err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "deleteFail",
+        description: err
+      };
+
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "deleteSuccess",
+        description: "User deleted succesfully."
+      };
+
+    }
+    
+    console.log(JSON.stringify(response, null, 2));
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  })
 
 });
 

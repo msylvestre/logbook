@@ -13,6 +13,7 @@ INSERT INTO logbook_user (email, password, info) VALUES (
   '{"email":"marco@venzee.com", "password":"123456789q"}'
 );
 
+SELECT info -> 'email' AS email FROM logbook_user;
+
 SELECT * FROM logbook_user;
 
-SELECT info -> 'email' AS email FROM logbook_user;

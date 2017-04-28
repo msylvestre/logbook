@@ -77,7 +77,7 @@ var User = function () {
   };
 
 
-
+  //-------------------------------------------------------------------------------------------------------
   this.create = function(user, callback) {
 
     var sql = 'INSERT INTO logbook_user (info)' +
@@ -136,6 +136,110 @@ var User = function () {
 
   };
 
+  //-------------------------------------------------------------------------------------------------------
+  this.getList = function(callback) {
+
+    var sql = 'SELECT * FROM logbook_user'
+
+    var params = null;
+
+    var pgClient = new pg.Client(dbConfig);
+
+    pgClient.connect(function (err) {
+
+      if (err) {
+        konsole.log(err);
+        callback(false, err.toString());
+      }
+      else {
+
+        pgClient.query(sql, params, function (err, result) {
+
+          if (err) {
+            var errorMsg = err.toString();
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            konsole.log(err);
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            pgClient.end(function(err) {
+              if (err) konsole.log(err);
+              callback(false, errorMsg);
+            });
+          }
+          else {
+
+            pgClient.end(function (err) {                       // disconnect the client 
+              if (err) konsole.log(err);
+              //konsole.log(JSON.stringify(result.rows, null, 2));
+              callback(result.rows, null);  // Return list of users
+            });
+
+          }
+
+
+        });
+
+      }      
+            
+    });
+  
+  };
+
+
+  //-------------------------------------------------------------------------------------------------------
+  this.delete = function(id, callback) {
+
+    var sql = 'DELETE FROM logbook_user WHERE id = $1'
+
+    var params = [id];
+
+    var pgClient = new pg.Client(dbConfig);
+
+    pgClient.connect(function (err) {
+
+      if (err) {
+        konsole.log(err);
+        callback(false, err.toString());
+      }
+      else {
+
+        pgClient.query(sql, params, function (err, result) {
+
+          if (err) {
+            var errorMsg = err.toString();
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            konsole.log(err);
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            pgClient.end(function(err) {
+              if (err) konsole.log(err);
+              callback(false, errorMsg);
+            });
+          }
+          else {
+
+            pgClient.end(function (err) {                       // disconnect the client 
+              if (err) konsole.log(err);
+              konsole.log(JSON.stringify(result, null, 2));
+
+              if (result.rowCount == 0) 
+                callback("User id not found.");  // Return list of users
+              else
+                callback(null);  // Return list of users
+            });
+
+          }
+
+
+        });
+
+      }      
+            
+    });
+  
+  };
+
 };
+
 
 module.exports = new User();
