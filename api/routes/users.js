@@ -2,19 +2,13 @@
 
 var express     = require('express');
 var router      = express.Router();
+
 var bodyParser  = require('body-parser');
+var konsole     = require('../lib/konsole.js');
+var user        = require('../lib/users.js');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create application/x-www-form-urlencoded parser
 
-
-
-// Get the List of users
-//--------------------------------------------------------------------------
-router.get('/', function (req, res) {
-
-  res.end("You reached GET /api/users");
-
-});
 
 
 
@@ -27,25 +21,45 @@ router.post('/', urlencodedParser, function (req, res) {
 });
 
 
-
 // Login a user
 //--------------------------------------------------------------------------
 router.get('/login/', urlencodedParser, function (req, res) {
 
-  // TEST : http://127.0.0.1:8081/api/users/login?username=msylvestre&password=123456789q
+  // TEST : http://127.0.0.1:8081/api/users/login?email=marco@venzee.com&password=123456789q
 
-  var username = req.query.username;
+  var email = req.query.email;
   var password = req.query.password;
+  var response;
 
-  var response = {
-    statusCode:666,
-    msg:"You reached GET /api/users/login/"
-  }
+  user.login(email, password, function(isValidUser, reasonIfInvalid) {
 
-  console.log(JSON.stringify(response, null, 2));
 
-  res.statusCode = 200;
-  res.send(response);
+    if (isValidUser) {
+
+      response = {
+        statusCode:200,
+        msg: "loginSuccess",
+        description: "User Login is Succesful."
+      }
+
+    }
+    else {
+
+      response = {
+        statusCode:404,
+        msg: "loginFail",
+        description: reasonIfInvalid
+      }
+
+    }
+
+    //console.log(JSON.stringify(response, null, 2));
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  });
+
 
   /*
   ERROR Structure
@@ -77,9 +91,18 @@ router.get('/login/', urlencodedParser, function (req, res) {
 
   RESPONSE CODE : 200
   */
-
-    
+   
 });
+
+
+// Get the List of users
+//--------------------------------------------------------------------------
+router.get('/', function (req, res) {
+
+  res.end("You reached GET /api/users");
+
+});
+
 
 
 module.exports = router;

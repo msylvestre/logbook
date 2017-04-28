@@ -8,7 +8,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create ap
 
 
 
-// GET /<solution>
+// GET /api/session
 //--------------------------------------------------------------------------
 router.get('/', function (req, res) {
 
@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
 
 // POST /<solution>/load
 //--------------------------------------------------------------------------
-router.post('/', urlencodedParser, function (req, res) {
+router.post('/new', urlencodedParser, function (req, res) {
 
   res.end("You reached POST /api/sessions");
     
