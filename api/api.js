@@ -10,7 +10,7 @@ var sessions_route  = require('./routes/sessions.js');
 
 app.use('/api/',         root_route);
 app.use('/api/users',    users_route);
-app.use('/api/sessions',     sessions_route);
+app.use('/api/sessions', sessions_route);
 
 
 // Start the server
