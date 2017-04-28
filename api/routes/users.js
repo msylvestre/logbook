@@ -63,6 +63,8 @@ router.get('/login/', urlencodedParser, function (req, res) {
     }
   }
   RESPONSE CODE : 404
+  4XX is user error
+  5XX is server error
 
 
   SUCCESS Structure
