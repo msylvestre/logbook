@@ -12,53 +12,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create ap
 
 
 
-// Create a new user (Register)
-//--------------------------------------------------------------------------
-router.post('/', urlencodedParser, function (req, res) {
-
-  var userInfo = {
-    firstname: req.body.firstname,
-    lastname:  req.body.lastname,
-    email:     req.body.email,
-    password:  req.body.response,
-    role:      req.body.role,
-    car: {
-      brand: req.body.carBrand,
-      model: req.body.carModel,
-      year: req.body.carYear,
-      color: req.body.carColor,
-      drivetrain: req.body.carDrivetrain
-    }
-  };
-    
-  var response;
-
-  konsole.log(JSON.stringify(req.body, null, 2));
-
-  user.create(userInfo, function(isRegistrationValid, reasonIfInvalid) {
-
-    if (isRegistrationValid) {
-      response = {
-        statusCode:200,
-        msg: "registrationSuccess",
-        description: "User Registration is Succesful."
-      }
-    }
-    else {
-      response = {
-        statusCode:404,
-        msg: "RegistrationFail",
-        description: reasonIfInvalid
-      }
-    }
-    res.statusCode = response.statusCode;
-    res.send(response);
-  
-  });
-    
-});
-
-
 // Login a user
 //--------------------------------------------------------------------------
 router.post('/login/', urlencodedParser, function (req, res) {
@@ -88,6 +41,100 @@ router.post('/login/', urlencodedParser, function (req, res) {
 
   });
    
+});
+
+
+// Create a new user (Register)
+//--------------------------------------------------------------------------
+router.post('/', urlencodedParser, function (req, res) {
+
+  var userInfo = {
+    firstname: req.body.firstname,
+    lastname:  req.body.lastname,
+    email:     req.body.email,
+    password:  req.body.password,
+    role:      req.body.role,
+    car: {
+      brand: req.body.carBrand,
+      model: req.body.carModel,
+      year: req.body.carYear,
+      color: req.body.carColor,
+      drivetrain: req.body.carDrivetrain
+    }
+  };
+    
+  var response;
+
+  konsole.log(JSON.stringify(req.body, null, 2));
+
+  user.create(userInfo, function(isRegistrationValid, reasonIfInvalid) {
+
+    if (isRegistrationValid) {
+      response = {
+        statusCode:200,
+        msg: "registrationSuccess",
+        description: "User Registration was succesful."
+      }
+    }
+    else {
+      response = {
+        statusCode:404,
+        msg: "registrationFail",
+        description: reasonIfInvalid
+      }
+    }
+    res.statusCode = response.statusCode;
+    res.send(response);
+  
+  });
+    
+});
+
+
+// Update a user
+//--------------------------------------------------------------------------
+router.put('/:id', urlencodedParser, function (req, res) {
+
+  var userInfo = {
+    firstname: req.body.firstname,
+    lastname:  req.body.lastname,
+    email:     req.body.email,
+    password:  req.body.password,
+    role:      req.body.role,
+    car: {
+      brand: req.body.carBrand,
+      model: req.body.carModel,
+      year: req.body.carYear,
+      color: req.body.carColor,
+      drivetrain: req.body.carDrivetrain
+    }
+  };
+    
+  var response;
+
+  konsole.log(JSON.stringify(req.body, null, 2));
+
+  user.update(req.params.id, userInfo, function(isUpdateValid, reasonIfInvalid) {
+
+    if (isUpdateValid) {
+      response = {
+        statusCode:200,
+        msg: "updateUserSuccess",
+        description: "User update was succesful."
+      }
+    }
+    else {
+      response = {
+        statusCode:404,
+        msg: "updateUserFail",
+        description: reasonIfInvalid
+      }
+    }
+    res.statusCode = response.statusCode;
+    res.send(response);
+  
+  });
+    
 });
 
 
@@ -131,7 +178,34 @@ router.get('/', function (req, res) {
 //--------------------------------------------------------------------------
 router.get('/:id', function (req, res) {
 
-  res.end("You reached GET /api/users/:id");
+  var response;
+
+  user.get(req.params.id, function(userInfo, err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "getUserFail",
+        description: err,
+        payload: null
+      };
+
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "getUserSuccess",
+        description: "User info retreived succesfully.",
+        payload: userInfo
+      };
+
+    }
+    
+    console.log(JSON.stringify(response, null, 2));
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  });
 
 });
 
@@ -165,7 +239,7 @@ router.delete('/:id', function (req, res) {
     res.statusCode = response.statusCode;
     res.send(response);
 
-  })
+  });
 
 });
 
