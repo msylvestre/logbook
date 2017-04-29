@@ -2,18 +2,17 @@
 
 CREATE TABLE logbook_user (
  id serial NOT NULL PRIMARY KEY,
- email text NULL,
- password text NULL,
- info json NULL
+ info json NOT NULL
 );
 
-INSERT INTO logbook_user (email, password, info) VALUES (
-  'marco@venzee.com',
-  '123456789q',
-  '{"email":"marco@venzee.com", "password":"123456789q"}'
-);
+INSERT INTO logbook_user (info) VALUES (
+    '{"firstname":"test","lastname":"user","email":"test_user@racinglogbook.com","password":"123456789q","role":"COACH",
+      "car" : {"Brand":"Subaru","Model":"STI","Year":"2009","Color":"White","Drivetrain":"AWD"}}'
+  );
 
 SELECT info -> 'email' AS email FROM logbook_user;
 
 SELECT * FROM logbook_user;
+
+
 

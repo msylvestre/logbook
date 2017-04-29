@@ -140,6 +140,64 @@ var User = function () {
 
 
   //-------------------------------------------------------------------------------------------------------
+  this.search = function(email, callback) {
+
+    var pgClient = new pg.Client(dbConfig);
+
+    var sql    = 'SELECT id, info FROM logbook_user WHERE info ->> \'email\' = $1';
+    var params = [email];
+
+    pgClient.connect(function (err) {
+
+      if (err) {
+        konsole.log(err);
+        callback(false, err.toString());
+      }
+      else {
+
+        pgClient.query(sql, params, function (err, result) {
+
+          if (err) {
+            var errorMsg = err.toString();
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            konsole.log(err);
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            pgClient.end(function(err) {
+              if (err) konsole.log(err);
+              callback(false, errorMsg);
+            });
+          }
+          else {
+
+            pgClient.end(function (err) {                       // disconnect the client 
+              
+              if (err) konsole.log(err);
+
+              //konsole.log(JSON.stringify(result, null, 2));
+
+              if (result.rowCount == 0) {
+                callback(null, 'No user found.');  // User Not Found
+              }
+              else {
+                callback(result.rows, null);  // Template found
+              }
+
+            });
+
+          }
+
+
+        });
+
+      }      
+            
+    });
+
+  };
+
+
+  //-------------------------------------------------------------------------------------------------------
   this.update = function(id, user, callback) {
 
     var sql = 'UPDATE logbook_user SET info = $1 WHERE id =$2';
@@ -175,7 +233,7 @@ var User = function () {
               
               if (err) konsole.log(err);
 
-              konsole.log(JSON.stringify(result, null, 2));
+              //konsole.log(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
                 callback(false, 'No user updated.  Id not found');  // User Not Found
@@ -234,7 +292,7 @@ var User = function () {
             pgClient.end(function (err) {                       // disconnect the client 
               if (err) konsole.log(err);
               
-              konsole.log(JSON.stringify(result.rows, null, 2));
+              //konsole.log(JSON.stringify(result.rows, null, 2));
 
               if (result.rowCount == 0) {
                 callback(null, 'User id not found.');  //User Not Found
@@ -340,7 +398,7 @@ var User = function () {
 
             pgClient.end(function (err) {                       // disconnect the client 
               if (err) konsole.log(err);
-              konsole.log(JSON.stringify(result, null, 2));
+              //konsole.log(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) 
                 callback("User id not found.");  // Return list of users

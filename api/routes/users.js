@@ -14,7 +14,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create ap
 
 // Login a user
 //--------------------------------------------------------------------------
-router.post('/login/', urlencodedParser, function (req, res) {
+router.post('/login', urlencodedParser, function (req, res) {
 
   var email = req.body.email;
   var password = req.body.password;
@@ -36,6 +36,12 @@ router.post('/login/', urlencodedParser, function (req, res) {
         description: reasonIfInvalid
       }
     }
+
+
+    konsole.log("------ Login ------");
+    console.log(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
     res.statusCode = response.statusCode;
     res.send(response);
 
@@ -65,29 +71,71 @@ router.post('/', urlencodedParser, function (req, res) {
     
   var response;
 
-  konsole.log(JSON.stringify(req.body, null, 2));
-
   user.create(userInfo, function(isRegistrationValid, reasonIfInvalid) {
 
     if (isRegistrationValid) {
       response = {
         statusCode:200,
-        msg: "registrationSuccess",
+        msg: "createUserSuccess",
         description: "User Registration was succesful."
       }
     }
     else {
       response = {
         statusCode:404,
-        msg: "registrationFail",
+        msg: "createUserFail",
         description: reasonIfInvalid
       }
     }
+
+    
+    konsole.log("---- Create User ----");
+    console.log(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
     res.statusCode = response.statusCode;
     res.send(response);
   
   });
     
+});
+
+
+// Search a user
+//--------------------------------------------------------------------------
+router.post('/search', urlencodedParser, function (req, res) {
+
+  var email = req.body.email;
+  var response;
+
+  user.search(email, function(list, err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "searchFail",
+        description: err
+      }
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "searchSuccess",
+        description: "Search was Succesful.",
+        payload: list
+      }
+    }
+
+    
+    konsole.log("------ Search -------");
+    console.log(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  });
+   
 });
 
 
@@ -112,7 +160,9 @@ router.put('/:id', urlencodedParser, function (req, res) {
     
   var response;
 
+  konsole.log("--- Update a user ---");
   konsole.log(JSON.stringify(req.body, null, 2));
+  konsole.log("---------------------");
 
   user.update(req.params.id, userInfo, function(isUpdateValid, reasonIfInvalid) {
 
@@ -130,6 +180,13 @@ router.put('/:id', urlencodedParser, function (req, res) {
         description: reasonIfInvalid
       }
     }
+
+
+    
+    konsole.log("---- Update User ----");
+    console.log(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
     res.statusCode = response.statusCode;
     res.send(response);
   
@@ -165,7 +222,10 @@ router.get('/', function (req, res) {
 
     }
     
+    konsole.log("------ GetList ------");
     console.log(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
     res.statusCode = response.statusCode;
     res.send(response);
 
@@ -201,7 +261,10 @@ router.get('/:id', function (req, res) {
 
     }
     
+    konsole.log("------ Get User -----");
     console.log(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
     res.statusCode = response.statusCode;
     res.send(response);
 
@@ -235,7 +298,10 @@ router.delete('/:id', function (req, res) {
 
     }
     
+    konsole.log("----- Delete User ------");
     console.log(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
     res.statusCode = response.statusCode;
     res.send(response);
 
