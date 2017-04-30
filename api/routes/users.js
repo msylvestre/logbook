@@ -20,26 +20,26 @@ router.post('/login', urlencodedParser, function (req, res) {
   var password = req.body.password;
   var response;
 
-  user.login(email, password, function(isValidUser, reasonIfInvalid) {
+  user.login(email, password, function(err) {
 
-    if (isValidUser) {
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "loginFail",
+        description: err
+      }
+    }
+    else {
       response = {
         statusCode:200,
         msg: "loginSuccess",
         description: "User Login is Succesful."
       }
     }
-    else {
-      response = {
-        statusCode:404,
-        msg: "loginFail",
-        description: reasonIfInvalid
-      }
-    }
 
 
     konsole.log("------ Login ------");
-    console.log(JSON.stringify(response, null, 2));
+    konsole.log(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -71,26 +71,26 @@ router.post('/', urlencodedParser, function (req, res) {
     
   var response;
 
-  user.create(userInfo, function(isRegistrationValid, reasonIfInvalid) {
+  user.create(userInfo, function(err) {
 
-    if (isRegistrationValid) {
-      response = {
-        statusCode:200,
-        msg: "createUserSuccess",
-        description: "User Registration was succesful."
-      }
-    }
-    else {
+    if (err) {
       response = {
         statusCode:404,
         msg: "createUserFail",
         description: reasonIfInvalid
       }
     }
+    else {
+      response = {
+        statusCode:200,
+        msg: "createUserSuccess",
+        description: "User Registration was succesful."
+      }
+    }
 
     
     konsole.log("---- Create User ----");
-    console.log(JSON.stringify(response, null, 2));
+    konsole.log(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -128,7 +128,7 @@ router.post('/search', urlencodedParser, function (req, res) {
 
     
     konsole.log("------ Search -------");
-    console.log(JSON.stringify(response, null, 2));
+    konsole.log(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -160,31 +160,31 @@ router.put('/:id', urlencodedParser, function (req, res) {
     
   var response;
 
-  konsole.log("--- Update a user ---");
+  konsole.log("--- UserInfo to update ---");
   konsole.log(JSON.stringify(req.body, null, 2));
   konsole.log("---------------------");
 
-  user.update(req.params.id, userInfo, function(isUpdateValid, reasonIfInvalid) {
+  user.update(req.params.id, userInfo, function(err) {
 
-    if (isUpdateValid) {
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "updateUserFail",
+        description: err
+      }
+    }
+    else {
       response = {
         statusCode:200,
         msg: "updateUserSuccess",
         description: "User update was succesful."
       }
     }
-    else {
-      response = {
-        statusCode:404,
-        msg: "updateUserFail",
-        description: reasonIfInvalid
-      }
-    }
 
 
     
     konsole.log("---- Update User ----");
-    console.log(JSON.stringify(response, null, 2));
+    konsole.log(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -223,7 +223,7 @@ router.get('/', function (req, res) {
     }
     
     konsole.log("------ GetList ------");
-    console.log(JSON.stringify(response, null, 2));
+    konsole.log(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -262,7 +262,7 @@ router.get('/:id', function (req, res) {
     }
     
     konsole.log("------ Get User -----");
-    console.log(JSON.stringify(response, null, 2));
+    konsole.log(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -299,7 +299,7 @@ router.delete('/:id', function (req, res) {
     }
     
     konsole.log("----- Delete User ------");
-    console.log(JSON.stringify(response, null, 2));
+    konsole.log(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;

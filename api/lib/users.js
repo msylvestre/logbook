@@ -40,29 +40,32 @@ var User = function () {
         pgClient.query(sql, params, function (err, result) {
 
           if (err) {
-            var errorMsg = err.toString();
             konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             konsole.log(err);
             konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             pgClient.end(function(err) {
-              if (err) konsole.log(err);
-              callback(false, errorMsg);
+              if (err) {
+                konsole.log(err);
+                callback(err.toString());
+              }
+              callback(err.toString());
             });
           }
           else {
 
             pgClient.end(function (err) {                       // disconnect the client 
               
-              if (err) konsole.log(err);
-
-              //konsole.log(JSON.stringify(result, null, 2));
+              if (err) {
+                konsole.log(err);
+                callback(err.toString());
+              }
 
               if (result.rowCount == 0) {
-                callback(false, 'Wrong creds or user not found.');  // User Not Found
+                callback('Wrong creds or user not found.');  // User Not Found
               }
               else {
-                callback(true, null);  // Template found
+                callback(null);  // Template found
               }
 
             });
@@ -82,8 +85,7 @@ var User = function () {
   //-------------------------------------------------------------------------------------------------------
   this.create = function(user, callback) {
 
-    var sql = 'INSERT INTO logbook_user (info)' +
-              'VALUES ($1)';
+    var sql = 'INSERT INTO logbook_user (info) VALUES ($1)';
 
     var params = [user];
 
@@ -119,10 +121,10 @@ var User = function () {
               konsole.log(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
-                callback(false, 'User creation failed');  // User Not Found
+                callback('User creation failed');  // User Not Found
               }
               else {
-                callback(true, null);  // Template found
+                callback(null);  // Template found
               }
 
             });
@@ -173,8 +175,6 @@ var User = function () {
             pgClient.end(function (err) {                       // disconnect the client 
               
               if (err) konsole.log(err);
-
-              //konsole.log(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
                 callback(null, 'No user found.');  // User Not Found
@@ -236,10 +236,10 @@ var User = function () {
               //konsole.log(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
-                callback(false, 'No user updated.  Id not found');  // User Not Found
+                callback('No user updated.  Id not found');  // User Not Found
               }
               else {
-                callback(true, null);  // Template found
+                callback(null);  // Template found
               }
 
             });
