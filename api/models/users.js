@@ -118,7 +118,7 @@ var User = function () {
               
               if (err) konsole.log(err);
 
-              konsole.log(JSON.stringify(result, null, 2));
+              //konsole.dir(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
                 callback('User creation failed');  // User Not Found
@@ -233,7 +233,7 @@ var User = function () {
               
               if (err) konsole.log(err);
 
-              //konsole.log(JSON.stringify(result, null, 2));
+              //konsole.dir(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
                 callback('No user updated.  Id not found');  // User Not Found
@@ -292,7 +292,7 @@ var User = function () {
             pgClient.end(function (err) {                       // disconnect the client 
               if (err) konsole.log(err);
               
-              //konsole.log(JSON.stringify(result.rows, null, 2));
+              //konsole.dir(JSON.stringify(result.rows, null, 2));
 
               if (result.rowCount == 0) {
                 callback(null, 'User id not found.');  //User Not Found
@@ -348,7 +348,7 @@ var User = function () {
 
             pgClient.end(function (err) {                       // disconnect the client 
               if (err) konsole.log(err);
-              //konsole.log(JSON.stringify(result.rows, null, 2));
+              //konsole.dir(JSON.stringify(result.rows, null, 2));
               callback(result.rows, null);  // Return list of users
             });
 
@@ -398,7 +398,7 @@ var User = function () {
 
             pgClient.end(function (err) {                       // disconnect the client 
               if (err) konsole.log(err);
-              //konsole.log(JSON.stringify(result, null, 2));
+              //konsole.dir(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) 
                 callback("User id not found.");  // Return list of users

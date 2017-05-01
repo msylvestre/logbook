@@ -4,7 +4,7 @@ var express     = require('express');
 var router      = express.Router();
 var bodyParser  = require('body-parser');
 var konsole     = require('../lib/konsole.js');
-var session     = require('../lib/sessions.js');
+var session     = require('../models/sessions.js');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create application/x-www-form-urlencoded parser
 
@@ -41,7 +41,7 @@ router.post('/', urlencodedParser, function (req, res) {
 
     
     konsole.log("---- Create Session ----");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("------------------------");
 
     res.statusCode = response.statusCode;

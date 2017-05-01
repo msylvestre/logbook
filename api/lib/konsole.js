@@ -25,7 +25,7 @@ var Konsole = function () {
   //-------------------------------------------------------------------------------------------------------
   this.log = function(data) {
     
-    var dataWithTimestamp = getTimestamp() + ' -- ' + data;
+    var dataWithTimestamp = data //getTimestamp() + ' -- ' + data;
 
 
     if (!logInConsole && !logInFile && !logInMemory) {
@@ -34,6 +34,37 @@ var Konsole = function () {
 
     if (logInConsole) {
       console.log(dataWithTimestamp);
+    }
+
+    if (logInFile) {
+
+      dataWithTimestamp += "\n";
+
+      fs.appendFile(logFile, dataWithTimestamp, function (err) {
+        if (err) console.error(err);
+      });
+    }
+
+    if (logInMemory) {
+      memoryLog = dataWithTimestamp + "\n" + memoryLog;
+    }
+
+  }
+
+
+  //-------------------------------------------------------------------------------------------------------
+  this.dir = function(data) {
+    
+    var dataWithTimestamp = data //getTimestamp() + ' -- ' + data;
+
+
+    if (!logInConsole && !logInFile && !logInMemory) {
+      throw new Error("No logging option at all !")
+    }
+
+    if (logInConsole) {
+      console.dir(JSON.parse(dataWithTimestamp), {depth: null, colors: true});
+      //console.log(dataWithTimestamp);
     }
 
     if (logInFile) {

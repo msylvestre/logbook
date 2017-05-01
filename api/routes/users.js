@@ -5,7 +5,7 @@ var router      = express.Router();
 
 var bodyParser  = require('body-parser');
 var konsole     = require('../lib/konsole.js');
-var user        = require('../lib/users.js');
+var user        = require('../models/users.js');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create application/x-www-form-urlencoded parser
 
@@ -38,8 +38,8 @@ router.post('/login', urlencodedParser, function (req, res) {
     }
 
 
-    konsole.log("------ Login ------");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.log("------ POST /users/login ------");
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -84,13 +84,14 @@ router.post('/', urlencodedParser, function (req, res) {
       response = {
         statusCode:200,
         msg: "createUserSuccess",
-        description: "User Registration was succesful."
+        description: "User Registration was succesful.",
+        payload : userInfo
       }
     }
 
     
-    konsole.log("---- Create User ----");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.log("---- POST /users - Create User ----");
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -127,8 +128,8 @@ router.post('/search', urlencodedParser, function (req, res) {
     }
 
     
-    konsole.log("------ Search -------");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.log("------ POST /users - Search -------");
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -160,31 +161,27 @@ router.put('/:id', urlencodedParser, function (req, res) {
     
   var response;
 
-  konsole.log("--- UserInfo to update ---");
-  konsole.log(JSON.stringify(req.body, null, 2));
-  konsole.log("---------------------");
-
   user.update(req.params.id, userInfo, function(err) {
 
     if (err) {
       response = {
         statusCode:404,
         msg: "updateUserFail",
-        description: err
+        description: err,
+        payload : null
       }
     }
     else {
       response = {
         statusCode:200,
         msg: "updateUserSuccess",
-        description: "User update was succesful."
+        description: "User update was succesful.",
+        payload : userInfo
       }
     }
-
-
     
-    konsole.log("---- Update User ----");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.log("--- PUT /users - Update user info ---");
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -222,8 +219,8 @@ router.get('/', function (req, res) {
 
     }
     
-    konsole.log("------ GetList ------");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.log("------ GET /users - Get users list ------");
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -261,8 +258,8 @@ router.get('/:id', function (req, res) {
 
     }
     
-    konsole.log("------ Get User -----");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.log("------ GET /users/:id - Get a user -----");
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
@@ -298,8 +295,8 @@ router.delete('/:id', function (req, res) {
 
     }
     
-    konsole.log("----- Delete User ------");
-    konsole.log(JSON.stringify(response, null, 2));
+    konsole.log("----- DELETE /users/:id ------");
+    konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("---------------------");
 
     res.statusCode = response.statusCode;
