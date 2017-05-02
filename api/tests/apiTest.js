@@ -71,26 +71,28 @@ describe('API /users', function() {
       email:         "fuel@racinglogbook.com",
       password:      "123456789q",
       role:          "COACH",
-      carBrand:      "Subaru",
-      carModel:      "STI",
-      carYear:       "2009",
-      carColor:      "White",
-      carDrivetrain: "AWD",
-    };
-
-    /*
+      car : [
+        {
+          brand:      "Subaru",
+          model:      "STI",
+          year:       "2009",
+          color:      "White",
+          drivetrain: "AWD"
+        }
+      ],
       experience : {
-        type : < KART, CAR_ROAD_RACE, CAR_DRIFT, BIKE >,
+        type : "CAR_ROAD_RACE",
         tracks : [
           {
-            trackName : string
+            trackName : "Icar"
           }
         ],
-        nbSession : integer [1..20+],
-        nbYear : integer, [1..5+],
-        note : string
+        nbSession : "20+",
+        nbYear : "5+",
+        note : null
       }
-    */
+    };
+
 
 
     chai.request('http://localhost:8081')
