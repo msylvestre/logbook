@@ -86,8 +86,22 @@ describe('API /users', function() {
       carModel:      "STI",
       carYear:       "2009",
       carColor:      "White",
-      carDrivetrain: "AWD"
+      carDrivetrain: "AWD",
     };
+
+    /*
+      experience : {
+        type : < KART, CAR_ROAD_RACE, CAR_DRIFT, BIKE >,
+        tracks : [
+          {
+            trackName : string
+          }
+        ],
+        nbSession : integer [1..20+],
+        nbYear : integer, [1..5+],
+        note : string
+      }
+    */
 
 
     chai.request('http://localhost:8081')
@@ -96,6 +110,9 @@ describe('API /users', function() {
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("createUserSuccess");
+          res.body.payload.firstname.should.be.eql("Racing");
+          res.body.payload.car.brand.should.be.eql("Subaru");
+          //res.body.payload.car[0].brand.should.be.eql("Subaru");  // Where I need to go !
           res.should.have.status(200);
           done();
         });
