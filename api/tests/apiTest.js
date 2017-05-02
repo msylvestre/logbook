@@ -7,23 +7,9 @@ var newUserId;
 
 chai.use(chaiHttp);
 
-var userUpdate = {
-  form: {
-    firstname:     "Racing",
-    lastname:      "Fuel",
-    email:         "fuel@racinglogbook.com",
-    password:      "123456789q",
-    role:          "COACH",
-    carBrand:      "Scion",
-    carModel:      "FRS",
-    carYear:       "2016",
-    carColor:      "Blue",
-    carDrivetrain: "RWD"
-  }
-};
 
-
-describe('API /users', function() {
+//==============================================================================
+describe('API /', function() {
 
   it('should get a statusCode 200 when reaching on /api/ if the API is up', (done) => {
 
@@ -34,7 +20,12 @@ describe('API /users', function() {
           done();
         });
   });
- 
+
+});
+
+
+//==============================================================================
+describe('API /users', function() {
 
   it('should get a statusCode 200 when login is successful', (done) => {
 
@@ -45,7 +36,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/login')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("loginSuccess");
@@ -64,7 +54,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/login')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("loginFail");
@@ -106,7 +95,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("createUserSuccess");
@@ -119,18 +107,32 @@ describe('API /users', function() {
   });
 
 
-  it('should get a statusCode 200 when search a user return at least 1 result', (done) => {
+  it('should get a statusCode 200 when exact search return 1 result', (done) => {
 
     var params = { email:'fuel@racinglogbook.com' };
 
     chai.request('http://localhost:8081')
         .post('/api/users/search')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("searchSuccess");
           res.should.have.status(200);
           newUserId = res.body.payload[0].id;
+          done();
+        });
+  });
+
+
+  it('should get a statusCode 200 when search a user return at least 1 result', (done) => {
+
+    var params = { email:'fuel' };
+
+    chai.request('http://localhost:8081')
+        .post('/api/users/search')
+        .send(params) 
+        .end((err, res) => {
+          res.body.msg.should.be.eql("searchSuccess");
+          res.should.have.status(200);
           done();
         });
   });
@@ -142,7 +144,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/search')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("searchFail");
@@ -183,7 +184,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .put('/api/users/' + newUserId)
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("updateUserSuccess");
@@ -211,7 +211,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .put('/api/users/0')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("updateUserFail");
@@ -268,5 +267,38 @@ describe('API /users', function() {
         });
   });
 
+});
+
+
+//==============================================================================
+describe('API /session', function() {
+
+  it('should get a statusCode 200 when a session is created successfully', (done) => {
+
+    var params = {
+      "sessionDate": "2017-04-30 09:00",
+      "track":       "Icar",
+      "group" :      "GREEN",
+      "length" :     20,
+      "sessionType" : "LAPPING_SOLO", 
+      "weather" : {
+        "track" :       "DRY",
+        "sky"   :       "OVERCAST",
+        "temperature" : 9
+      }
+    };
+
+
+    chai.request('http://localhost:8081')
+        .post('/api/sessions')
+        //.set('content-type', 'application/x-www-form-urlencoded')
+        .send(params) 
+        .end((err, res) => {
+          //console.dir(res.body);
+          res.body.msg.should.be.eql('addSessionFail');
+          res.should.have.status(404);
+          done();
+        });
+  });
 
 });

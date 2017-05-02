@@ -146,7 +146,7 @@ var User = function () {
 
     var pgClient = new pg.Client(dbConfig);
 
-    var sql    = 'SELECT id, info FROM logbook_user WHERE info ->> \'email\' = $1';
+    var sql    = 'SELECT id, info FROM logbook_user WHERE info ->> \'email\' like $1';
     var params = [email];
 
     pgClient.connect(function (err) {
@@ -401,7 +401,7 @@ var User = function () {
               //konsole.dir(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) 
-                callback("User id not found.");  // Return list of users
+                callback("User id not found : " + id);  // Return list of users
               else
                 callback(null);  // Return list of users
             });

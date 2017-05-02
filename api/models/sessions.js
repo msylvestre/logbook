@@ -15,7 +15,67 @@ var Session = function () {
     port:     config.postgres.db.port
   };
 
-};
 
+  //-------------------------------------------------------------------------------------------------------
+  this.add = function(sessionInfo, callback) {
+/*
+    var sql = 'INSERT INTO session (info) VALUES ($1)';
+
+    var params = [user];
+
+    var pgClient = new pg.Client(dbConfig);
+
+    pgClient.connect(function (err) {
+
+      if (err) {
+        konsole.log(err);
+        callback(false, err.toString());
+      }
+      else {
+
+        pgClient.query(sql, params, function (err, result) {
+
+          if (err) {
+            var errorMsg = err.toString();
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            konsole.log(err);
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            pgClient.end(function(err) {
+              if (err) konsole.log(err);
+              callback(false, errorMsg);
+            });
+          }
+          else {
+
+            pgClient.end(function (err) {                       // disconnect the client 
+              
+              if (err) konsole.log(err);
+
+              //konsole.dir(JSON.stringify(result, null, 2));
+
+              if (result.rowCount == 0) {
+                callback('User creation failed');  // User Not Found
+              }
+              else {
+                callback(null);  // Template found
+              }
+
+            });
+
+          }
+
+
+        });
+
+      }      
+            
+    });
+    */
+    callback("dammit");
+
+  };
+
+};
 
 module.exports = new Session();
