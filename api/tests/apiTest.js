@@ -84,7 +84,7 @@ describe('API /users', function() {
         type : "CAR_ROAD_RACE",
         tracks : [
           {
-            trackName : "Icar"
+            trackName : "ICAR"
           }
         ],
         nbSession : "20+",
@@ -93,16 +93,16 @@ describe('API /users', function() {
       }
     };
 
-
-
     chai.request('http://localhost:8081')
         .post('/api/users')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("createUserSuccess");
           res.body.payload.firstname.should.be.eql("Racing");
-          res.body.payload.car.brand.should.be.eql("Subaru");
-          //res.body.payload.car[0].brand.should.be.eql("Subaru");  // Where I need to go !
+          //res.body.payload.car.brand.should.be.eql("Subaru");
+          res.body.payload.car[0].brand.should.be.eql("Subaru");
+          res.body.payload.experience.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload.tracks[0].trackName.should.be.eql("ICAR");
           res.should.have.status(200);
           done();
         });
@@ -175,21 +175,39 @@ describe('API /users', function() {
       lastname:      "Fuel",
       email:         "fuel@racinglogbook.com",
       password:      "123456789q",
-      role:          "driver",
-      carBrand:      "Scion",
-      carModel:      "FRS",
-      carYear:       "2016",
-      carColor:      "Blue",
-      carDrivetrain: "RWD"
+      role:          "DRIVER",
+      car : [
+        {
+          brand:      "Scion",
+          model:      "FRS",
+          year:       "2016",
+          color:      "Blue",
+          drivetrain: "RWD"
+        }
+      ],
+      experience : {
+        type : "CAR_ROAD_RACE",
+        tracks : [
+          {
+            trackName : "ICAR"
+          }
+        ],
+        nbSession : "20+",
+        nbYear : "5+",
+        note : null
+      }
     };
-
 
     chai.request('http://localhost:8081')
         .put('/api/users/' + newUserId)
         .send(params) 
         .end((err, res) => {
-          res.body.msg.should.be.eql("updateUserSuccess");
           res.should.have.status(200);
+          res.body.msg.should.be.eql("updateUserSuccess");
+          res.body.payload.role.should.be.eql("DRIVER");
+          res.body.payload.car[0].brand.should.be.eql("Scion");
+          res.body.payload.experience.type.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload.experience.tracks[0].trackName.should.be.eql("ICAR");
           done();
         });
   });
@@ -202,12 +220,27 @@ describe('API /users', function() {
       lastname:      "Fuel",
       email:         "fuel@racinglogbook.com",
       password:      "123456789q",
-      role:          "driver",
-      carBrand:      "Scion",
-      carModel:      "FRS",
-      carYear:       "2016",
-      carColor:      "Blue",
-      carDrivetrain: "RWD"
+      role:          "DRIVER",
+      car : [
+        {
+          brand:      "CADILLAC",
+          model:      "CTS-V",
+          year:       "2016",
+          color:      "BLACK",
+          drivetrain: "RWD"
+        }
+      ],
+      experience : {
+        type : "CAR_ROAD_RACE",
+        tracks : [
+          {
+            trackName : "Icar"
+          }
+        ],
+        nbSession : "20+",
+        nbYear : "5+",
+        note : null
+      }
     };
 
 
@@ -227,8 +260,13 @@ describe('API /users', function() {
     chai.request('http://localhost:8081')
         .get('/api/users/1')
         .end((err, res) => {
-          res.body.msg.should.be.eql("getUserSuccess");
           res.should.have.status(200);
+          res.body.msg.should.be.eql("getUserSuccess");
+          res.body.payload.firstname.should.be.eql("Racing");
+          res.body.payload.car[0].brand.should.be.eql("Scion");
+          res.body.payload.experience.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload.tracks[0].trackName.should.be.eql("ICAR");
+
           done();
         });
   });
