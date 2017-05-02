@@ -15,10 +15,6 @@ var urlencodedParser = bodyParser.json();  // Create application/x-www-form-urle
 //--------------------------------------------------------------------------
 router.post('/', function (req, res) {
 
-  konsole.log("!!!!!!!!!!!!!!! CREATE SEESISON")
-
-  konsole.log(req.body);
-
   var sessionInfo = {
     date: req.body.date,
     track: req.body.track,
@@ -46,6 +42,7 @@ router.post('/', function (req, res) {
 
     
     konsole.log("---- Create Session ----");
+    konsole.dir(JSON.stringify(req.body, null, 2));
     konsole.dir(JSON.stringify(response, null, 2));
     konsole.log("------------------------");
 

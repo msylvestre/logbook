@@ -7,7 +7,7 @@ var newUserId;
 
 chai.use(chaiHttp);
 
-/*
+
 //==============================================================================
 describe('API /', function() {
 
@@ -36,7 +36,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/login')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("loginSuccess");
@@ -55,7 +54,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/login')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("loginFail");
@@ -83,7 +81,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("createUserSuccess");
@@ -99,7 +96,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/search')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("searchSuccess");
@@ -116,7 +112,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/search')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("searchSuccess");
@@ -132,7 +127,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .post('/api/users/search')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("searchFail");
@@ -173,7 +167,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .put('/api/users/' + newUserId)
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("updateUserSuccess");
@@ -201,7 +194,6 @@ describe('API /users', function() {
 
     chai.request('http://localhost:8081')
         .put('/api/users/0')
-        .set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("updateUserFail");
@@ -242,7 +234,6 @@ describe('API /users', function() {
         .end((err, res) => {
           res.body.msg.should.be.eql("deleteSuccess");
           res.should.have.status(200);
-          console.log ("newUserId : " + newUserId);
           done();
         });
   });
@@ -260,7 +251,7 @@ describe('API /users', function() {
   });
 
 });
-*/
+
 
 //==============================================================================
 describe('API /session', function() {
@@ -286,9 +277,9 @@ describe('API /session', function() {
         //.set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
-          console.dir(res);
-          res.body.msg.should.be.eql("sessionUserSuccess");
-          res.should.have.status(200);
+          //console.dir(res.body);
+          res.body.msg.should.be.eql('addSessionFail');
+          res.should.have.status(404);
           done();
         });
   });
