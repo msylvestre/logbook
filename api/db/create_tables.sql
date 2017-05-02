@@ -7,13 +7,17 @@ CREATE TABLE logbook_user (
 );
 
 INSERT INTO logbook_user (info) VALUES (
-  '{"firstname":"test","lastname":"user","email":"test_user@racinglogbook.com","password":"123456789q","role":"COACH",
-    "car" : {"Brand":"Subaru","Model":"STI","Year":"2009","Color":"White","Drivetrain":"AWD"}}'
+  '{"firstname":"Test","lastname":"User","email":"test_user@racinglogbook.com","password":"123456789q","role":"COACH",
+    "cars" : [ {"brand":"Pontiac","model":"Chevette","year":"1984","color":"Beige","drivetrain":"RWD"} ],
+    "experience" : {"type" : "CAR_ROAD_RACE", "tracks" : [ {"trackName" : "ICAR"} ], "nbSession" : "20+", "nbYear" : "5+", "note" : null}}'
 );
+
 
 SELECT info -> 'email' AS email FROM logbook_user;
 
 SELECT * FROM logbook_user;
+
+SELECT id, info FROM logbook_user WHERE info ->> 'email' like '%fuel%';
 
 ------------------------------------------------------------
 

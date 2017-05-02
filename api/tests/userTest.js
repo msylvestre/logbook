@@ -3,6 +3,7 @@ var request    = require('request');
 var chai       = require('chai');
 var chaiHttp   = require('chai-http');
 var should     = chai.should();
+var konsole    = require('../lib/konsole.js');
 var newUserId;
 
 chai.use(chaiHttp);
@@ -71,7 +72,7 @@ describe('API /users', function() {
       email:         "fuel@racinglogbook.com",
       password:      "123456789q",
       role:          "COACH",
-      car : [
+      cars : [
         {
           brand:      "Subaru",
           model:      "STI",
@@ -100,9 +101,9 @@ describe('API /users', function() {
           res.body.msg.should.be.eql("createUserSuccess");
           res.body.payload.firstname.should.be.eql("Racing");
           //res.body.payload.car.brand.should.be.eql("Subaru");
-          res.body.payload.car[0].brand.should.be.eql("Subaru");
-          res.body.payload.experience.should.be.eql("CAR_ROAD_RACE");
-          res.body.payload.tracks[0].trackName.should.be.eql("ICAR");
+          res.body.payload.cars[0].brand.should.be.eql("Subaru");
+          res.body.payload.experience.type.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload.experience.tracks[0].trackName.should.be.eql("ICAR");
           res.should.have.status(200);
           done();
         });
@@ -127,7 +128,7 @@ describe('API /users', function() {
 
   it('should get a statusCode 200 when search a user return at least 1 result', (done) => {
 
-    var params = { email:'fuel' };
+    var params = { email:'%fuel%' };
 
     chai.request('http://localhost:8081')
         .post('/api/users/search')
@@ -176,7 +177,7 @@ describe('API /users', function() {
       email:         "fuel@racinglogbook.com",
       password:      "123456789q",
       role:          "DRIVER",
-      car : [
+      cars : [
         {
           brand:      "Scion",
           model:      "FRS",
@@ -186,7 +187,7 @@ describe('API /users', function() {
         }
       ],
       experience : {
-        type : "CAR_ROAD_RACE",
+        type : "KART",
         tracks : [
           {
             trackName : "ICAR"
@@ -202,11 +203,14 @@ describe('API /users', function() {
         .put('/api/users/' + newUserId)
         .send(params) 
         .end((err, res) => {
+          //konsole.log(newUserId);
+          //konsole.dir(JSON.stringify(res.body));
           res.should.have.status(200);
           res.body.msg.should.be.eql("updateUserSuccess");
+          res.body.payload.firstname.should.be.eql("Racing");
           res.body.payload.role.should.be.eql("DRIVER");
-          res.body.payload.car[0].brand.should.be.eql("Scion");
-          res.body.payload.experience.type.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload.cars[0].brand.should.be.eql("Scion");
+          res.body.payload.experience.type.should.be.eql("KART");
           res.body.payload.experience.tracks[0].trackName.should.be.eql("ICAR");
           done();
         });
@@ -262,10 +266,10 @@ describe('API /users', function() {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.msg.should.be.eql("getUserSuccess");
-          res.body.payload.firstname.should.be.eql("Racing");
-          res.body.payload.car[0].brand.should.be.eql("Scion");
-          res.body.payload.experience.should.be.eql("CAR_ROAD_RACE");
-          res.body.payload.tracks[0].trackName.should.be.eql("ICAR");
+          res.body.payload[0].info.firstname.should.be.eql("Test");
+          res.body.payload[0].info.cars[0].brand.should.be.eql("Pontiac");
+          res.body.payload[0].info.experience.type.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload[0].info.experience.tracks[0].trackName.should.be.eql("ICAR");
 
           done();
         });
@@ -334,7 +338,7 @@ describe('API /session', function() {
         //.set('content-type', 'application/x-www-form-urlencoded')
         .send(params) 
         .end((err, res) => {
-          //console.dir(res.body);
+          //konsole.dir(res.body);
           res.body.msg.should.be.eql('addSessionFail');
           res.should.have.status(404);
           done();

@@ -16,8 +16,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create ap
 //--------------------------------------------------------------------------
 router.post('/login', urlencodedParser, function (req, res) {
 
-  //var email = req.body.email;
-  //var password = req.body.password;
   var response;
 
   user.login(req.body, function(err) {
@@ -54,20 +52,7 @@ router.post('/login', urlencodedParser, function (req, res) {
 //--------------------------------------------------------------------------
 router.post('/', urlencodedParser, function (req, res) {
 
-  var userInfo = {
-    firstname: req.body.firstname,
-    lastname:  req.body.lastname,
-    email:     req.body.email,
-    password:  req.body.password,
-    role:      req.body.role,
-    car: {
-      brand: req.body.carBrand,
-      model: req.body.carModel,
-      year: req.body.carYear,
-      color: req.body.carColor,
-      drivetrain: req.body.carDrivetrain
-    }
-  };
+  var userInfo = req.body;
     
   var response;
 
@@ -77,7 +62,7 @@ router.post('/', urlencodedParser, function (req, res) {
       response = {
         statusCode:404,
         msg: "createUserFail",
-        description: reasonIfInvalid
+        description: err
       }
     }
     else {
@@ -144,21 +129,7 @@ router.post('/search', urlencodedParser, function (req, res) {
 //--------------------------------------------------------------------------
 router.put('/:id', urlencodedParser, function (req, res) {
 
-  var userInfo = {
-    firstname: req.body.firstname,
-    lastname:  req.body.lastname,
-    email:     req.body.email,
-    password:  req.body.password,
-    role:      req.body.role,
-    car: {
-      brand: req.body.carBrand,
-      model: req.body.carModel,
-      year: req.body.carYear,
-      color: req.body.carColor,
-      drivetrain: req.body.carDrivetrain
-    }
-  };
-    
+  var userInfo = req.body;    
   var response;
 
   user.update(req.params.id, userInfo, function(err) {
