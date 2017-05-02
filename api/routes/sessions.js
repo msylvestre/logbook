@@ -6,13 +6,18 @@ var bodyParser  = require('body-parser');
 var konsole     = require('../lib/konsole.js');
 var session     = require('../models/sessions.js');
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.json();  // Create application/x-www-form-urlencoded parser
+//var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create application/x-www-form-urlencoded parser
 
 
 
 // Create a new session
 //--------------------------------------------------------------------------
-router.post('/', urlencodedParser, function (req, res) {
+router.post('/', function (req, res) {
+
+  konsole.log("!!!!!!!!!!!!!!! CREATE SEESISON")
+
+  konsole.log(req.body);
 
   var sessionInfo = {
     date: req.body.date,

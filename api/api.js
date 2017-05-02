@@ -3,11 +3,14 @@
 var express = require('express');
 var app     = express();
 
+var bodyParser = require('body-parser');
+
 // Initialize the routing
 var root_route      = require('./routes/root.js');
 var users_route     = require('./routes/users.js');
 var sessions_route  = require('./routes/sessions.js');
 
+app.use(bodyParser.json());
 app.use('/api/',         root_route);
 app.use('/api/users',    users_route);
 app.use('/api/sessions', sessions_route);
