@@ -169,6 +169,35 @@ describe('API /users', function() {
   });
 
 
+  it('should get a statusCode 200 when getting a user', (done) => {
+
+    chai.request('http://localhost:8081')
+        .get('/api/users/1')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.msg.should.be.eql("getUserSuccess");
+          res.body.payload.info.firstname.should.be.eql("Test");
+          res.body.payload.info.cars[0].brand.should.be.eql("Pontiac");
+          res.body.payload.info.experience.type.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload.info.experience.tracks[0].trackName.should.be.eql("ICAR");
+
+          done();
+        });
+  });
+
+
+  it('should get a statusCode 404 when getting a user that doesn\'t exist', (done) => {
+
+    chai.request('http://localhost:8081')
+        .get('/api/users/0')
+        .end((err, res) => {
+          res.body.msg.should.be.eql("getUserFail");
+          res.should.have.status(404);
+          done();
+        });
+  });
+
+
   it('should get a statusCode 200 when updating a user is successful', (done) => {
 
     var params = {
@@ -253,35 +282,6 @@ describe('API /users', function() {
         .send(params) 
         .end((err, res) => {
           res.body.msg.should.be.eql("updateUserFail");
-          res.should.have.status(404);
-          done();
-        });
-  });
-
-
-  it('should get a statusCode 200 when getting a user', (done) => {
-
-    chai.request('http://localhost:8081')
-        .get('/api/users/1')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.msg.should.be.eql("getUserSuccess");
-          res.body.payload[0].info.firstname.should.be.eql("Test");
-          res.body.payload[0].info.cars[0].brand.should.be.eql("Pontiac");
-          res.body.payload[0].info.experience.type.should.be.eql("CAR_ROAD_RACE");
-          res.body.payload[0].info.experience.tracks[0].trackName.should.be.eql("ICAR");
-
-          done();
-        });
-  });
-
-
-  it('should get a statusCode 404 when getting a user that doesn\'t exist', (done) => {
-
-    chai.request('http://localhost:8081')
-        .get('/api/users/0')
-        .end((err, res) => {
-          res.body.msg.should.be.eql("getUserFail");
           res.should.have.status(404);
           done();
         });

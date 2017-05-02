@@ -301,7 +301,7 @@ var User = function () {
                 callback(null, 'User id not found.');  //User Not Found
               }
               else {
-                callback(result.rows, null);  // User found
+                callback(result.rows[0], null);  // User found
               }
 
             });
