@@ -16,11 +16,11 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create ap
 //--------------------------------------------------------------------------
 router.post('/login', urlencodedParser, function (req, res) {
 
-  var email = req.body.email;
-  var password = req.body.password;
+  //var email = req.body.email;
+  //var password = req.body.password;
   var response;
 
-  user.login(email, password, function(err) {
+  user.login(req.body, function(err) {
 
     if (err) {
       response = {

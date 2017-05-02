@@ -19,14 +19,14 @@ var User = function () {
 
 
   //-------------------------------------------------------------------------------------------------------
-  this.login = function(email, password, callback) {
+  this.login = function(creds, callback) {
 
     var pgClient = new pg.Client(dbConfig);
 
     var sql    = 'SELECT id, info FROM logbook_user WHERE info ->> \'email\' = $1 and info ->> \'password\' = $2';
     var params = [
-      email,
-      password
+      creds.email,
+      creds.password
     ];
 
     pgClient.connect(function (err) {
