@@ -62,7 +62,8 @@ router.post('/', urlencodedParser, function (req, res) {
       response = {
         statusCode:404,
         msg: "createUserFail",
-        description: err
+        description: err,
+        payload : userInfo
       }
     }
     else {
@@ -298,7 +299,7 @@ router.post('/:id/sessions', function (req, res) {
   var sessionInfo = req.body;    
   var response;
 
-  session.add(sessionInfo, function(err) {
+  session.add(req.params.id, sessionInfo, function(err) {
 
     if (err) {
       response = {

@@ -382,10 +382,34 @@ describe('API /session', function() {
         });
   });
 
-  xit('should get a statusCode 200 when getting a session list', (done) => {
+  it('should get a statusCode 200 when getting a session list', (done) => {
+
+    chai.request('http://localhost:8081')
+        .get('/api/users/1/sessions')
+        .end((err, res) => {
+          res.body.msg.should.be.eql("getSessionsListSuccess");
+          res.body.payload.length.should.be.eql(2);
+          res.should.have.status(200);
+          done();
+        });
+  
   });
 
-  xit('should get a statusCode 200 when getting a session', (done) => {
+  it('should get a statusCode 200 when getting a session', (done) => {
+
+    chai.request('http://localhost:8081')
+        .get('/api/users/1/sessions/1')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.msg.should.be.eql("getUserSuccess");
+          res.body.payload.info.firstname.should.be.eql("Test");
+          res.body.payload.info.cars[0].brand.should.be.eql("Pontiac");
+          res.body.payload.info.experience.type.should.be.eql("CAR_ROAD_RACE");
+          res.body.payload.info.experience.tracks[0].trackName.should.be.eql("ICAR");
+
+          done();
+        });
+
   });
 
   xit('should get a statusCode 404 when getting a session that doesn\'t exist', (done) => {

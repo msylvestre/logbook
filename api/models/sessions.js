@@ -17,11 +17,11 @@ var Session = function () {
 
 
   //-------------------------------------------------------------------------------------------------------
-  this.add = function(sessionInfo, callback) {
+  this.add = function(driverId, sessionInfo, callback) {
 
-    var sql = 'INSERT INTO session (info) VALUES ($1)';
+    var sql = 'INSERT INTO session (user_id, info) VALUES ($1, $2)';
 
-    var params = [sessionInfo];
+    var params = [driverId, sessionInfo];
 
     var pgClient = new pg.Client(dbConfig);
 
