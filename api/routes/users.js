@@ -6,10 +6,10 @@ var router      = express.Router();
 var bodyParser  = require('body-parser');
 var konsole     = require('../lib/konsole.js');
 var user        = require('../models/users.js');
+var session     = require('../models/sessions.js');
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create application/x-www-form-urlencoded parser
-
-
+//var urlencodedParser = bodyParser.urlencoded({ extended: false });  // Create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.json();
 
 
 // Login a user
@@ -275,6 +275,59 @@ router.delete('/:id', function (req, res) {
 
   });
 
+});
+
+
+
+
+//==========================================================================
+//==========================================================================
+
+//                               SESSIONS
+
+//==========================================================================
+//==========================================================================
+
+
+
+
+// Create a new session
+//--------------------------------------------------------------------------
+router.post('/:id/sessions', function (req, res) {
+
+  var sessionInfo = req.body;    
+  var response;
+
+  session.add(sessionInfo, function(err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "addSessionFail",
+        description: err,
+        payload : sessionInfo
+      }
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "addSessionSuccess",
+        description: "User Registration was succesful.",
+        payload : sessionInfo
+      }
+    }
+
+    
+    konsole.log("---- Create Session ----");
+    konsole.dir(JSON.stringify(sessionInfo, null, 2));
+    konsole.dir(JSON.stringify(response, null, 2));
+    konsole.log("------------------------");
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+  
+  });
+    
 });
 
 

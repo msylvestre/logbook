@@ -1,5 +1,6 @@
 var bodyParser = require('body-parser');
 var request    = require('request');
+var dateFormat = require('date-format');
 var chai       = require('chai');
 var chaiHttp   = require('chai-http');
 var should     = chai.should();
@@ -320,29 +321,86 @@ describe('API /session', function() {
   it('should get a statusCode 200 when a session is created successfully', (done) => {
 
     var params = {
-      "sessionDate": "2017-04-30 09:00",
-      "track":       "Icar",
-      "group" :      "GREEN",
-      "length" :     20,
-      "sessionType" : "LAPPING_SOLO", 
-      "weather" : {
-        "track" :       "DRY",
-        "sky"   :       "OVERCAST",
-        "temperature" : 9
-      }
+      sessionDate:  "2017-04-30 09:00",
+      track:        "Icar",
+      group :       "GREEN",
+      length :      20,
+      sessionType : "LAPPING_SOLO", 
+      weather : {
+        track       : "DRY",
+        sky         : "OVERCAST",
+        temperature : 9
+      },
+      evaluation : {
+        driverPosition : 5,
+        flagKnowledge : 5,
+        blendLineRespect : 5,
+        carControl : 5,
+        vision360 : 5,
+        passing : 5,
+        braking : 5,
+        shifting : 5,
+        trackLine : 5,
+        pitOut : 5,
+        promotionRecommended : "NO",
+        promotedGroup : "INSTRUCTOR",
+        overallScore : 5,
+        coachId : 1,
+        coachName : "Test User",
+        note : "Very good student!" 
+      },
+      timing : {
+        bestTime : {
+          id : 2,
+          lapTime : "1:50"
+        },
+        time : [
+          {
+             id : 1,
+             lapTime : "2.02",
+          },
+          {
+             id : 2,
+             lapTime : "1:50",
+          }         
+        ],
+      },
+      note : "Senna as an inspiration.",
+      createdDate : "2017-05-01 23:59:00",
+      updatedDate : dateFormat('yyyy-MM-dd hh:mm:ss', new Date())
     };
 
 
     chai.request('http://localhost:8081')
-        .post('/api/sessions')
-        //.set('content-type', 'application/x-www-form-urlencoded')
+        .post('/api/users/1/sessions')
         .send(params) 
         .end((err, res) => {
-          //konsole.dir(res.body);
-          res.body.msg.should.be.eql('addSessionFail');
-          res.should.have.status(404);
+          //konsole.dir(JSON.stringify(res.body));
+          res.body.msg.should.be.eql('addSessionSuccess');
+          res.should.have.status(200);
           done();
         });
+  });
+
+  xit('should get a statusCode 200 when getting a session list', (done) => {
+  });
+
+  xit('should get a statusCode 200 when getting a session', (done) => {
+  });
+
+  xit('should get a statusCode 404 when getting a session that doesn\'t exist', (done) => {
+  });
+
+  xit('should get a statusCode 200 when updating a session', (done) => {
+  });
+
+  xit('should get a statusCode 404 when trying to update a session thats not found', (done) => {
+  });
+
+  xit('should get a statusCode 200 when deleting a session', (done) => {
+  });
+
+  xit('should get a statusCode 404 when the session to be deleted doesn\'t exist', (done) => {
   });
 
 });

@@ -14,10 +14,10 @@ INSERT INTO logbook_user (info) VALUES (
 
 
 SELECT info -> 'email' AS email FROM logbook_user;
+SELECT id, info FROM logbook_user WHERE info ->> 'email' like '%fuel%';
 
 SELECT * FROM logbook_user;
 
-SELECT id, info FROM logbook_user WHERE info ->> 'email' like '%fuel%';
 
 ------------------------------------------------------------
 
@@ -28,6 +28,16 @@ CREATE TABLE session (
 
 
 INSERT INTO session (info) VALUES (
- '{"sessionDate" : "2017-04-30 09:00 GMT-4", "track":"Icar"}'
+ '{"sessionDate":"2017-04-30 09:00","track":"Icar","group":"GREEN","length":20,"sessionType":"LAPPING_SOLO",
+   "weather":{"track":"DRY","sky":"OVERCAST","temperature":9},
+   "evaluation":{"driverPosition":5,"flagKnowledge":5,"blendLineRespect":5,"carControl":5,"vision360":5,"passing":5, "braking":5,"shifting":5,
+                 "trackLine":5,"pitOut":5,"promotionRecommended":"NO","promotedGroup":"","overallScore":5,"coachId":1,"coachName":"Test User", "note": ""},
+   "timing" : {
+        "bestTime" : {"id" : "2","lapTime" : "1:50"},
+        "time" : [ {"id" : 1, "lapTime" : "2.02"}, {"id" : 2, "lapTime" : "1:50"} ] },
+   "note" : "Senna as an inspiration.",
+   "createdDate" : "2017-05-01 23:59:00",
+   "updatedDate" : "2017-05-02 10:00:00"}'
 );
 
+SELECT info ->> 'evaluation' FROM session

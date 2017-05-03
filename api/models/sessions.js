@@ -18,10 +18,10 @@ var Session = function () {
 
   //-------------------------------------------------------------------------------------------------------
   this.add = function(sessionInfo, callback) {
-/*
+
     var sql = 'INSERT INTO session (info) VALUES ($1)';
 
-    var params = [user];
+    var params = [sessionInfo];
 
     var pgClient = new pg.Client(dbConfig);
 
@@ -29,7 +29,7 @@ var Session = function () {
 
       if (err) {
         konsole.log(err);
-        callback(false, err.toString());
+        callback(err.toString());
       }
       else {
 
@@ -43,7 +43,7 @@ var Session = function () {
 
             pgClient.end(function(err) {
               if (err) konsole.log(err);
-              callback(false, errorMsg);
+              callback(errorMsg);
             });
           }
           else {
@@ -55,24 +55,21 @@ var Session = function () {
               //konsole.dir(JSON.stringify(result, null, 2));
 
               if (result.rowCount == 0) {
-                callback('User creation failed');  // User Not Found
+                callback('Session creation failed'); 
               }
               else {
-                callback(null);  // Template found
+                callback(null);  // Sessions created, no error
               }
 
             });
 
           }
 
-
         });
 
       }      
             
     });
-    */
-    callback("dammit");
 
   };
 
