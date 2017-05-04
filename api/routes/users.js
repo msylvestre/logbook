@@ -332,4 +332,158 @@ router.post('/:id/sessions', function (req, res) {
 });
 
 
+// Get the List of sessions for a user
+//--------------------------------------------------------------------------
+router.get('/:userId/sessions', function (req, res) {
+
+  var response;
+
+  session.getList(req.params.userId, function(list, err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "getSessionsListFail",
+        description: err,
+        payload: null
+      };
+
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "getSessionsListSuccess",
+        description: "User list retreived succesfully.",
+        payload: list
+      };
+
+    }
+    
+    konsole.log("------ GET /users/:id/sessionst ------");
+    konsole.dir(JSON.stringify(response, null, 2));
+    konsole.log("--------------------------------------");
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  })
+
+});
+
+
+// Get a session
+//--------------------------------------------------------------------------
+router.get('/:userId/sessions/:id', function (req, res) {
+
+  var response;
+
+  session.get(req.params.userId, req.params.id, function(userInfo, err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "getSessionFail",
+        description: err,
+        payload: null
+      };
+
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "getSessionSuccess",
+        description: "User info retreived succesfully.",
+        payload: userInfo
+      };
+
+    }
+    
+    konsole.log("------ GET /users/:userId/sessions/:id -----");
+    konsole.dir(JSON.stringify(response, null, 2));
+    konsole.log("--------------------------------------------");
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  });
+
+});
+
+
+// Search a session
+//--------------------------------------------------------------------------
+router.post('/:id/sessions/search', urlencodedParser, function (req, res) {
+
+  var criteria = req.body.criteria;
+  var value    = req.body.value;
+  var response;
+
+  session.search(criteria, value, function(list, err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "searchSessionFail",
+        description: err
+      }
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "searchSessionSuccess",
+        description: "Search Session was Succesful.",
+        payload: list
+      }
+    }
+
+    
+    konsole.log("------ POST /users/:id/sessions/search ------");
+    konsole.dir(JSON.stringify(response, null, 2));
+    konsole.log("---------------------------------------------");
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  });
+   
+});
+
+
+// Delete a session
+//--------------------------------------------------------------------------
+router.delete('/:userId/sessions/:id', function (req, res) {
+
+  var response;
+
+  session.delete(req.params.userId, req.params.id, function(err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "deleteSessionFail",
+        description: err
+      };
+
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "deleteSessionSuccess",
+        description: "User deleted succesfully."
+      };
+
+    }
+    
+    konsole.log("----- DELETE /users/:userId/session/:id ------");
+    konsole.dir(JSON.stringify(response, null, 2));
+    konsole.log("---------------------");
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+
+  });
+
+});
+
+
 module.exports = router;

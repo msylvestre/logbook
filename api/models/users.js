@@ -149,9 +149,6 @@ var User = function () {
     var sql    = 'SELECT id, info FROM logbook_user WHERE info ->> \'email\' like $1';
     var params = [email];
 
-    konsole.log(sql);
-    konsole.log(email);
-
     pgClient.connect(function (err) {
 
       if (err) {

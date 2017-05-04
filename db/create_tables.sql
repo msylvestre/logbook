@@ -9,7 +9,7 @@ CREATE TABLE logbook_user (
 INSERT INTO logbook_user (info) VALUES (
   '{"firstname":"Test","lastname":"User","email":"test_user@racinglogbook.com","password":"123456789q","role":"COACH",
     "cars" : [ {"brand":"Pontiac","model":"Chevette","year":"1984","color":"Beige","drivetrain":"RWD"} ],
-    "experience" : {"type" : "CAR_ROAD_RACE", "tracks" : [ {"trackName" : "ICAR"} ], "nbSession" : "20+", "nbYear" : "5+", "note" : null}}'
+    "experience" : {"type" : "CAR_ROAD_RACE", "tracks" : [ {"trackName" : "Icar"} ], "nbSession" : "20+", "nbYear" : "5+", "note" : null}}'
 );
 
 

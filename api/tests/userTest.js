@@ -86,7 +86,7 @@ describe('API /users', function() {
         type : "CAR_ROAD_RACE",
         tracks : [
           {
-            trackName : "ICAR"
+            trackName : "Icar"
           }
         ],
         nbSession : "20+",
@@ -101,10 +101,9 @@ describe('API /users', function() {
         .end((err, res) => {
           res.body.msg.should.be.eql("createUserSuccess");
           res.body.payload.firstname.should.be.eql("Racing");
-          //res.body.payload.car.brand.should.be.eql("Subaru");
           res.body.payload.cars[0].brand.should.be.eql("Subaru");
           res.body.payload.experience.type.should.be.eql("CAR_ROAD_RACE");
-          res.body.payload.experience.tracks[0].trackName.should.be.eql("ICAR");
+          res.body.payload.experience.tracks[0].trackName.should.be.eql("Icar");
           res.should.have.status(200);
           done();
         });
@@ -180,7 +179,7 @@ describe('API /users', function() {
           res.body.payload.info.firstname.should.be.eql("Test");
           res.body.payload.info.cars[0].brand.should.be.eql("Pontiac");
           res.body.payload.info.experience.type.should.be.eql("CAR_ROAD_RACE");
-          res.body.payload.info.experience.tracks[0].trackName.should.be.eql("ICAR");
+          res.body.payload.info.experience.tracks[0].trackName.should.be.eql("Icar");
 
           done();
         });
@@ -315,116 +314,3 @@ describe('API /users', function() {
 });
 
 
-//==============================================================================
-describe('API /session', function() {
-
-  it('should get a statusCode 200 when a session is created successfully', (done) => {
-
-    var params = {
-      sessionDate:  "2017-04-30 09:00",
-      track:        "Icar",
-      group :       "GREEN",
-      length :      20,
-      sessionType : "LAPPING_SOLO", 
-      weather : {
-        track       : "DRY",
-        sky         : "OVERCAST",
-        temperature : 9
-      },
-      evaluation : {
-        driverPosition : 5,
-        flagKnowledge : 5,
-        blendLineRespect : 5,
-        carControl : 5,
-        vision360 : 5,
-        passing : 5,
-        braking : 5,
-        shifting : 5,
-        trackLine : 5,
-        pitOut : 5,
-        promotionRecommended : "NO",
-        promotedGroup : "INSTRUCTOR",
-        overallScore : 5,
-        coachId : 1,
-        coachName : "Test User",
-        note : "Very good student!" 
-      },
-      timing : {
-        bestTime : {
-          id : 2,
-          lapTime : "1:50"
-        },
-        time : [
-          {
-             id : 1,
-             lapTime : "2.02",
-          },
-          {
-             id : 2,
-             lapTime : "1:50",
-          }         
-        ],
-      },
-      note : "Senna as an inspiration.",
-      createdDate : "2017-05-01 23:59:00",
-      updatedDate : dateFormat('yyyy-MM-dd hh:mm:ss', new Date())
-    };
-
-
-    chai.request('http://localhost:8081')
-        .post('/api/users/1/sessions')
-        .send(params) 
-        .end((err, res) => {
-          //konsole.dir(JSON.stringify(res.body));
-          res.body.msg.should.be.eql('addSessionSuccess');
-          res.should.have.status(200);
-          done();
-        });
-  });
-
-  it('should get a statusCode 200 when getting a session list', (done) => {
-
-    chai.request('http://localhost:8081')
-        .get('/api/users/1/sessions')
-        .end((err, res) => {
-          res.body.msg.should.be.eql("getSessionsListSuccess");
-          res.body.payload.length.should.be.eql(2);
-          res.should.have.status(200);
-          done();
-        });
-  
-  });
-
-  it('should get a statusCode 200 when getting a session', (done) => {
-
-    chai.request('http://localhost:8081')
-        .get('/api/users/1/sessions/1')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.msg.should.be.eql("getUserSuccess");
-          res.body.payload.info.firstname.should.be.eql("Test");
-          res.body.payload.info.cars[0].brand.should.be.eql("Pontiac");
-          res.body.payload.info.experience.type.should.be.eql("CAR_ROAD_RACE");
-          res.body.payload.info.experience.tracks[0].trackName.should.be.eql("ICAR");
-
-          done();
-        });
-
-  });
-
-  xit('should get a statusCode 404 when getting a session that doesn\'t exist', (done) => {
-  });
-
-  xit('should get a statusCode 200 when updating a session', (done) => {
-  });
-
-  xit('should get a statusCode 404 when trying to update a session thats not found', (done) => {
-  });
-
-  xit('should get a statusCode 200 when deleting a session', (done) => {
-  });
-
-  xit('should get a statusCode 404 when the session to be deleted doesn\'t exist', (done) => {
-  });
-
-});
