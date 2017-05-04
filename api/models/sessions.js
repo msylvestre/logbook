@@ -182,12 +182,14 @@ var Session = function () {
 
 
   //-------------------------------------------------------------------------------------------------------
-  this.search = function(criteria, value, callback) {
+  this.search = function(userId, criteria, value, callback) {
 
     var pgClient = new pg.Client(dbConfig);
 
-    var sql    = 'SELECT id, user_id, info FROM session WHERE info ->> \'' + criteria + '\' like $1';
-    var params = [value];
+    var sql      = 'SELECT id, user_id, info ' +
+                   'FROM session ' +
+                   'WHERE user_id = $1 AND info ->> \'' + criteria + '\' like $2';
+    var params   = [userId, value];
 
     pgClient.connect(function (err) {
 
@@ -235,6 +237,63 @@ var Session = function () {
     });
 
   };
+
+
+  //-------------------------------------------------------------------------------------------------------
+  this.update = function(userId, sessionId, sessionInfo, callback) {
+
+    var sql = 'UPDATE session SET info = $1 WHERE user_id = $2 AND id = $3';
+
+    var params = [sessionInfo, userId, sessionId];
+
+    var pgClient = new pg.Client(dbConfig);
+
+    pgClient.connect(function (err) {
+
+      if (err) {
+        konsole.log(err);
+        callback(err.toString());
+      }
+      else {
+
+        pgClient.query(sql, params, function (err, result) {
+
+          if (err) {
+            var errorMsg = err.toString();
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            konsole.log(err);
+            konsole.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            pgClient.end(function(err) {
+              if (err) konsole.log(err);
+              callback(errorMsg);
+            });
+          }
+          else {
+
+            pgClient.end(function (err) {                       // disconnect the client 
+              
+              if (err) konsole.log(err);
+              //konsole.dir(JSON.stringify(result, null, 2));
+              if (result.rowCount == 0) {
+                callback('No session updated.  Id ' + sessionId + ' not found');  // Sesion Not Found
+              }
+              else {
+                callback(null);  // Session updated succesfully
+              }
+
+            });
+
+          }
+
+
+        });
+
+      }      
+            
+    });
+
+  }
 
 
   //-------------------------------------------------------------------------------------------------------

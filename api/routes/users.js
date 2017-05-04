@@ -371,7 +371,7 @@ router.get('/:userId/sessions', function (req, res) {
 });
 
 
-// Get a session
+// Get a session for a user
 //--------------------------------------------------------------------------
 router.get('/:userId/sessions/:id', function (req, res) {
 
@@ -410,15 +410,16 @@ router.get('/:userId/sessions/:id', function (req, res) {
 });
 
 
-// Search a session
+// Search a session for s user
 //--------------------------------------------------------------------------
 router.post('/:id/sessions/search', urlencodedParser, function (req, res) {
 
   var criteria = req.body.criteria;
   var value    = req.body.value;
+  var userId   = req.params.id;
   var response;
 
-  session.search(criteria, value, function(list, err) {
+  session.search(userId, criteria, value, function(list, err) {
 
     if (err) {
       response = {
@@ -449,7 +450,47 @@ router.post('/:id/sessions/search', urlencodedParser, function (req, res) {
 });
 
 
-// Delete a session
+// Update a session for user
+//--------------------------------------------------------------------------
+router.put('/:userId/sessions/:id', urlencodedParser, function (req, res) {
+
+  var userId      = req.params.userId;
+  var sessionId  = req.params.id;
+  var sessionInfo = req.body;    
+  var response;
+
+  session.update(userId, sessionId, sessionInfo, function(err) {
+
+    if (err) {
+      response = {
+        statusCode:404,
+        msg: "updateSessionFail",
+        description: err,
+        payload : sessionInfo
+      }
+    }
+    else {
+      response = {
+        statusCode:200,
+        msg: "updateSessionSuccess",
+        description: "Session update was succesful.",
+        payload : sessionInfo
+      }
+    }
+    
+    konsole.log("--- PUT /users/:id/sessions/:id ---");
+    konsole.dir(JSON.stringify(response, null, 2));
+    konsole.log("-----------------------------------");
+
+    res.statusCode = response.statusCode;
+    res.send(response);
+  
+  });
+    
+});
+
+
+// Delete a session for a user
 //--------------------------------------------------------------------------
 router.delete('/:userId/sessions/:id', function (req, res) {
 

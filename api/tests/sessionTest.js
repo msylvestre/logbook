@@ -118,11 +118,19 @@ describe('API /sessions', function() {
   });
 
 
-  xit('should get a statusCode 200 when updating a session', (done) => {
-  });
+  it('should get a statusCode 200 when search return at least result', (done) => {
 
+    var params = { criteria: 'track', value: 'Ic%' };
 
-  xit('should get a statusCode 404 when trying to update a session thats not found', (done) => {
+    chai.request('http://localhost:8081')
+        .post('/api/users/1/sessions/search')
+        .send(params) 
+        .end((err, res) => {
+          res.body.msg.should.be.eql("searchSessionSuccess");
+          res.should.have.status(200);
+          res.body.payload.length.should.be.eql(1);  // Will fail with more data in the db... need "greaterThan"
+          done();
+        });
   });
 
 
@@ -142,6 +150,90 @@ describe('API /sessions', function() {
   });
 
 
+  it('should get a statusCode 200 when updating a session', (done) => {
+
+    var params = {
+      sessionDate:  "2017-04-30 09:00",
+      track:        "Mosport",
+      group :       "GREEN",
+      length :      20,
+      sessionType : "LAPPING_SOLO", 
+      weather : {
+        track       : "WET",
+        sky         : "OVERCAST",
+        temperature : 9
+      },
+      evaluation : {
+        driverPosition : 5,
+        flagKnowledge : 5,
+        blendLineRespect : 5,
+        carControl : 5,
+        vision360 : 5,
+        passing : 5,
+        braking : 5,
+        shifting : 5,
+        trackLine : 5,
+        pitOut : 5,
+        promotionRecommended : "NO",
+        promotedGroup : "INSTRUCTOR",
+        overallScore : 5,
+        coachId : 1,
+        coachName : "Test User",
+        note : "Very good student!" 
+      },
+      timing : {
+        bestTime : {
+          id : 1,
+          lapTime : "1:42"
+        },
+        time : [
+          {
+             id : 1,
+             lapTime : "1.42",
+          },
+          {
+             id : 2,
+             lapTime : "1:50",
+          }         
+        ],
+      },
+      note : "Senna as an inspiration.",
+      createdDate : "2017-05-01 23:59:00",
+      updatedDate : dateFormat('yyyy-MM-dd hh:mm:ss', new Date())
+    };
+
+    chai.request('http://localhost:8081')
+        .put('/api/users/1/sessions/' + newSessionId)
+        .send(params) 
+        .end((err, res) => {
+          //konsole.dir(JSON.stringify(res.body));
+          res.should.have.status(200);
+          res.body.msg.should.be.eql("updateSessionSuccess");
+          res.body.payload.track.should.be.eql("Mosport");
+          res.body.payload.weather.track.should.be.eql("WET");
+          res.body.payload.timing.bestTime.id.should.be.eql(1);
+          done();
+        });
+  });
+
+
+  it('should get a statusCode 404 when trying to update a session thats not found', (done) => {
+
+    var params = null;
+
+    chai.request('http://localhost:8081')
+        .put('/api/users/1/sessions/0')
+        .send(params) 
+        .end((err, res) => {
+          //konsole.dir(JSON.stringify(res.body));
+          res.should.have.status(404);
+          res.body.msg.should.be.eql("updateSessionFail");
+          done();
+        });
+
+  });
+
+
   it('should get a statusCode 200 when deleting a session', (done) => {
 
     chai.request('http://localhost:8081')
@@ -151,7 +243,6 @@ describe('API /sessions', function() {
           res.should.have.status(200);
           done();
         });
-   
   });
 
   it('should get a statusCode 404 when the session to be deleted doesn\'t exist', (done) => {
