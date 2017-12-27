@@ -1,4 +1,4 @@
-## Racing logbook
+## Racinglogbook.net Technical Doc
 
 ### Description
 This is the Wiki that contain all the documentation about the system racinglogbook.net
@@ -11,7 +11,7 @@ This is the Wiki that contain all the documentation about the system racinglogbo
 - Database
 
 
-<INSERT PICS HERE>
+![image](https://user-images.githubusercontent.com/6956436/34385105-4aa0cb90-eaee-11e7-8191-a74e657eb210.png)
 
 
 ## API Documentation
@@ -27,10 +27,10 @@ This is the Wiki that contain all the documentation about the system racinglogbo
 
 There's currently 4 differemnt ressource available in the v1 of the API.
 
-Admin : Hidden ressource.  Currently use to reset password only.
-Users : Represent the drivers & instructors.
-Sessions : Represent a "lapping session" on a specific time, on a specifc place.
-Tracks : Represent the tracks where we're having events.
+- Admin : Hidden ressource.  Currently use to reset password only.
+- Users : Represent the drivers & instructors.
+- Sessions : Represent a "lapping session" on a specific time, on a specifc place.
+- Tracks : Represent the tracks where we're having events.
 
 
 ### Root
